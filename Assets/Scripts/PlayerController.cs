@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(m_BlueShootMouseButton) && CanShoot())
-            Shoot();
+            //Shoot();
 
         UpdateHUD();
     }
@@ -229,10 +229,10 @@ public class PlayerController : MonoBehaviour
         {
             if (l_RaycastHit.collider.CompareTag("DrawableWall"))
             {
-                if(_Portal.IsValidPosition(l_RaycastHit.point, ))
-                {
+                //if(_Portal.IsValidPosition(l_RaycastHit.point, ))
+                //{
 
-                }
+                //}
             }
         }
 
