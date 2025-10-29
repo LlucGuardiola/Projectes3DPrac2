@@ -246,7 +246,7 @@ public class PlayerController : MonoBehaviour
     }
     void SetIdleAnimation()
     {
-        m_Animation.CrossFade(m_IdleAnimationClip.name);
+        //m_Animation.CrossFade(m_IdleAnimationClip.name);
     }
     void SetReloadAnimation()
     {

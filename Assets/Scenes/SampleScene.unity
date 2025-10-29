@@ -906,10 +906,6 @@ PrefabInstance:
       propertyPath: m_MirrorPortal
       value: 
       objectReference: {fileID: 100190909}
-    - target: {fileID: 1836752167483860914, guid: 8fb3d0d3061271c43bbfbf71d0a678b4, type: 3}
-      propertyPath: mm_NearCameraOffset
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4856796118914801010, guid: 8fb3d0d3061271c43bbfbf71d0a678b4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.008
