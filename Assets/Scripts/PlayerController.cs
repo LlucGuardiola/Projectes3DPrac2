@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
 
     bool CanShoot()
     {
-        return true;
+        return m_AttachedRigidbody == null; // AttachedObjectRigidbody
         //bool l_CanShoot = m_MagazineCurrentBullets > 0 && m_FireRateCurrentTime <= 0f && m_ReloadTime <= 0f;
         //return l_CanShoot;
     }
@@ -413,17 +413,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        //m_AttachingObject = true;
-        //m_AttachedRigidbody = _Rigidody;
-        //m_StartAttachingObjectPosition = _Rigidody.transform.position;
-        //m_AttachingCurrentTime = 0f;
-        //m_AttachedObject = false;
     }
 
     void AttachObject(Rigidbody _Rigidbody)
     {
         m_AttachingObject = true;
         m_AttachedRigidbody = _Rigidbody;
+        m_AttachedRigidbody.GetComponent<CompanionCube>().SetAttachedObject(true);
         m_StartAttachingObjectPosition = _Rigidbody.transform.position;
         m_AttachingCurrentTime = 0f;
         m_AttachedObject = false;
@@ -453,7 +449,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
             ThrowObject(m_ThrowForce);
-        else if (Input.GetMouseButtonDown(1) || Input.GetKeyUp(m_GrabKeyCode))
+        else if (Input.GetMouseButtonDown(1))
             ThrowObject(0f);
     }
     
@@ -464,6 +460,7 @@ public class PlayerController : MonoBehaviour
         m_AttachedRigidbody.transform.SetParent(null);
         m_AttachingObject = false;
         m_AttachedObject = false;
+        m_AttachedRigidbody.GetComponent<CompanionCube>().SetAttachedObject(false);
         m_AttachedRigidbody = null;
     }
 
