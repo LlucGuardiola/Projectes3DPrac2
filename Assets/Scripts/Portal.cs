@@ -11,7 +11,7 @@ public class Portal : MonoBehaviour
     public float mm_NearCameraOffset;
     public List<Transform> m_ValidPositions;
 
-
+    [Header("Validation")]
     public float m_ValidDistanceOffset = .15f;
     public LayerMask m_ValidLayerMask;
     public float m_MaxAnglePermitted = 5.0f;
@@ -33,6 +33,7 @@ public class Portal : MonoBehaviour
     }
     public bool IsValidPosition(Vector3 Position, Vector3 Normal)
     {
+        gameObject.SetActive(false);
         transform.position = Position;
         transform.rotation = Quaternion.LookRotation(Normal);
 
@@ -47,7 +48,8 @@ public class Portal : MonoBehaviour
             l_Direction /= l_Distance;
 
             Ray l_Ray = new Ray(l_CameraPosition, l_Direction);
-            if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, l_Distance + m_ValidDistanceOffset, m_ValidLayerMask.value))
+            if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, l_Distance + m_ValidDistanceOffset, 
+                m_ValidLayerMask.value, QueryTriggerInteraction.Ignore))
             {
                 if (l_RaycastHit.collider.CompareTag("DrawableWall"))
                 {

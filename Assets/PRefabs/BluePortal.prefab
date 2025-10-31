@@ -97,7 +97,7 @@ MonoBehaviour:
   m_ValidDistanceOffset: 0.15
   m_ValidLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_MaxAnglePermitted: 5
 --- !u!65 &3042575955656975235
 BoxCollider:

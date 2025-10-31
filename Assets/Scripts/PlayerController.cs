@@ -61,8 +61,9 @@ public class PlayerController : MonoBehaviour
     private KeyCode m_DownKeyCode = KeyCode.S;
     private KeyCode m_JumpKeyCode = KeyCode.Space;
     private KeyCode m_RunKeyCode = KeyCode.LeftShift;
+    private KeyCode m_GrabKeyCode = KeyCode.E;
     public int m_BlueShootMouseButton = 0;
-    public int m_OrangeShootMouseButton = 0;
+    public int m_OrangeShootMouseButton = 1;
 
     [Header("Debug Input")]
     public KeyCode m_DebugLockAngleKeyCode = KeyCode.I;
@@ -79,8 +80,22 @@ public class PlayerController : MonoBehaviour
     Vector3 m_MovementDirection;
     public float m_MaxAngleToTeleport;
 
+    [Header("Portals")]
     public Portal m_BluePortal;
     public Portal m_OrangePortal;
+
+    [Header("AttachObject")]
+    public ForceMode m_ForceMode;
+    public float m_ThrowForce = 10f;
+    public Transform m_GripTransform;
+    Rigidbody m_AttachedRigidbody;
+    bool m_AttachingObject;
+    Vector3 m_StartAttachingObjectPosition;
+    float m_AttachingCurrentTime;
+    public float m_AttachingTime = 1.5f;
+    public float m_AttachingObjetRotationDistanceLerp = 2f;
+    bool m_AttachedObject;
+    public LayerMask m_ValidAttachObjectsLayerMask;
 
     void Start()
     {
@@ -170,19 +185,36 @@ public class PlayerController : MonoBehaviour
             m_VerticalSpeed = m_JumpSpeed;
             CoyoteTimeCounter = 0;
         }
+        
+        if(CanShoot())
+        {
+            if (Input.GetMouseButtonDown(m_BlueShootMouseButton))
+                Shoot(m_BluePortal);
+            else if (Input.GetMouseButtonDown(m_OrangeShootMouseButton))
+                Shoot(m_OrangePortal);
+        }
 
-        if (Input.GetMouseButtonDown(m_BlueShootMouseButton) && CanShoot())
-            //Shoot();
+        if (CanAttachObjects())
+            AttachObject();
+
+        if (m_AttachedRigidbody != null)
+            UpdateAttachedObject();
+
+        //if (Input.GetMouseButtonDown(m_BlueShootMouseButton) && CanShoot())
+        //    //Shoot();
 
         UpdateHUD();
+    }
+    bool CanAttachObjects()
+    {
+        return true;
     }
 
     bool CanShoot()
     {
-        //if(Input)
-
-        bool l_CanShoot = m_MagazineCurrentBullets > 0 && m_FireRateCurrentTime <= 0f && m_ReloadTime <= 0f;
-        return l_CanShoot;
+        return true;
+        //bool l_CanShoot = m_MagazineCurrentBullets > 0 && m_FireRateCurrentTime <= 0f && m_ReloadTime <= 0f;
+        //return l_CanShoot;
     }
     int GetBullets()
     {
@@ -223,16 +255,22 @@ public class PlayerController : MonoBehaviour
         //        CreateShootHitParticles(l_RaycastHit.point, l_RaycastHit.normal);
         //    }
         //}
-
+        SetShootAnimation();
         Ray l_Ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance, _Portal.m_ValidLayerMask.value))
+        if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance, 
+            _Portal.m_ValidLayerMask.value, QueryTriggerInteraction.Ignore))
         {
             if (l_RaycastHit.collider.CompareTag("DrawableWall"))
             {
-                //if(_Portal.IsValidPosition(l_RaycastHit.point, ))
-                //{
+                if (_Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal))
+                {
+                    _Portal.gameObject.SetActive(true);
 
-                //}
+                }
+                else
+                {
+                    _Portal.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -254,8 +292,8 @@ public class PlayerController : MonoBehaviour
     }
     void SetShootAnimation()
     {
-        m_Animation.CrossFade(m_ShootAnimationClip.name, 0.1f);
-        m_Animation.CrossFadeQueued(m_IdleAnimationClip.name, 0.0f);
+        //m_Animation.CrossFade(m_ShootAnimationClip.name, 0.1f);
+        //m_Animation.CrossFadeQueued(m_IdleAnimationClip.name, 0.0f);
     }
 
     public void AddAmo(int Ammo)
@@ -359,6 +397,74 @@ public class PlayerController : MonoBehaviour
 
         m_CharacterController.enabled = true;
         UpdateHUD();
+    }
+
+    void AttachObject()
+    {   
+        if(Input.GetKeyDown(m_GrabKeyCode))
+        {
+            Ray l_Ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance,
+                m_ValidAttachObjectsLayerMask.value, QueryTriggerInteraction.Ignore))
+            {
+                if (l_RaycastHit.collider.CompareTag("Cube"))
+                {
+                    AttachObject(l_RaycastHit.rigidbody);
+                }
+            }
+        }
+        //m_AttachingObject = true;
+        //m_AttachedRigidbody = _Rigidody;
+        //m_StartAttachingObjectPosition = _Rigidody.transform.position;
+        //m_AttachingCurrentTime = 0f;
+        //m_AttachedObject = false;
+    }
+
+    void AttachObject(Rigidbody _Rigidbody)
+    {
+        m_AttachingObject = true;
+        m_AttachedRigidbody = _Rigidbody;
+        m_StartAttachingObjectPosition = _Rigidbody.transform.position;
+        m_AttachingCurrentTime = 0f;
+        m_AttachedObject = false;
+    }
+    void UpdateAttachedObject()
+    {
+        if (m_AttachingObject)
+        {
+            m_AttachingCurrentTime += Time.deltaTime;
+            float l_Pct = Mathf.Min(1f, m_AttachingCurrentTime / m_AttachingTime);
+            Vector3 l_Position = Vector3.Lerp(m_StartAttachingObjectPosition, m_GripTransform.position, l_Pct);
+            float l_Distance = Vector3.Distance(l_Position, m_GripTransform.position);
+            float l_RotationPct = 1f - Mathf.Min(1f, l_Distance / m_AttachingObjetRotationDistanceLerp);
+            Quaternion l_Rotation = Quaternion.Lerp(transform.rotation, m_GripTransform.rotation.normalized, l_RotationPct);
+            m_AttachedRigidbody.MovePosition(l_Position);
+            m_AttachedRigidbody.MoveRotation(l_Rotation);
+
+            if(l_Pct == 1f)
+            {
+                m_AttachingObject = false;
+                m_AttachedObject = true;
+                m_AttachedRigidbody.transform.SetParent(m_GripTransform);
+                m_AttachedRigidbody.transform.localPosition = Vector3.zero;
+                m_AttachedRigidbody.transform.localRotation = Quaternion.identity;
+                m_AttachedRigidbody.isKinematic = true;
+            }
+        }
+        if (Input.GetMouseButtonDown(0))
+            ThrowObject(m_ThrowForce);
+        else if (Input.GetMouseButtonDown(1) || Input.GetKeyUp(m_GrabKeyCode))
+            ThrowObject(0f);
+    }
+    
+    void ThrowObject(float Force)
+    {
+        m_AttachedRigidbody.isKinematic = false;
+        m_AttachedRigidbody.AddForce(m_PitchController.forward * Force, m_ForceMode);
+        m_AttachedRigidbody.transform.SetParent(null);
+        m_AttachingObject = false;
+        m_AttachedObject = false;
+        m_AttachedRigidbody = null;
     }
 
     public void TakeDamage(int damage)
