@@ -421,6 +421,7 @@ public class PlayerController : MonoBehaviour
         m_AttachedRigidbody = _Rigidbody;
         m_AttachedRigidbody.GetComponent<CompanionCube>().SetAttachedObject(true);
         m_StartAttachingObjectPosition = _Rigidbody.transform.position;
+        Debug.Log("m_StartAttachingObjectPosition " + m_StartAttachingObjectPosition);
         m_AttachingCurrentTime = 0f;
         m_AttachedObject = false;
     }
@@ -433,7 +434,7 @@ public class PlayerController : MonoBehaviour
             Vector3 l_Position = Vector3.Lerp(m_StartAttachingObjectPosition, m_GripTransform.position, l_Pct);
             float l_Distance = Vector3.Distance(l_Position, m_GripTransform.position);
             float l_RotationPct = 1f - Mathf.Min(1f, l_Distance / m_AttachingObjetRotationDistanceLerp);
-            Quaternion l_Rotation = Quaternion.Lerp(transform.rotation, m_GripTransform.rotation.normalized, l_RotationPct);
+            Quaternion l_Rotation = Quaternion.Lerp(transform.rotation, m_GripTransform.rotation, l_RotationPct);
             m_AttachedRigidbody.MovePosition(l_Position);
             m_AttachedRigidbody.MoveRotation(l_Rotation);
 

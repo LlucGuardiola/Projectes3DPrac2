@@ -53,10 +53,10 @@ public class Portal : MonoBehaviour
             {
                 if (l_RaycastHit.collider.CompareTag("DrawableWall"))
                 {
-                    if(Vector3.Distance(l_RaycastHit.point, l_ValidPosition) < m_ValidDistanceOffset)
+                    if (Vector3.Distance(l_RaycastHit.point, l_ValidPosition) < m_ValidDistanceOffset)
                     {
                         float l_DotAngle = Vector3.Dot(l_RaycastHit.normal, m_ValidPositions[i].forward);
-                        if(l_DotAngle > Mathf.Cos(m_MaxAnglePermitted * Mathf.Deg2Rad))
+                        if(l_DotAngle < Mathf.Cos(m_MaxAnglePermitted * Mathf.Deg2Rad))
                         {
                             l_Valid = false;
                         }
