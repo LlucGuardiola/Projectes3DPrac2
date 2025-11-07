@@ -19,8 +19,14 @@ public class Turret : MonoBehaviour
             m_LineRenderer.gameObject.SetActive(true);
             float l_Distance = m_MaxDistance;
             Ray l_Ray = new Ray(m_LineRenderer.transform.position, m_LineRenderer.transform.forward);
-            if(Physics.Raycast(l_Ray, out RaycastHit l_RayCastHit, m_MaxDistance, m_LayerMask.value,QueryTriggerInteraction.Ignore))
+            if(Physics.Raycast(l_Ray, out RaycastHit l_RayCastHit, m_MaxDistance, m_LayerMask.value, QueryTriggerInteraction.Ignore))
+            {
                 l_Distance = l_RayCastHit.distance;
+                if (l_RayCastHit.collider.CompareTag("RefractionCube"))
+                {
+                    l_RayCastHit.collider.GetComponent<RefractionCube>().Reflect();
+                }
+            }
             Vector3 l_Position = new Vector3(0f, 0f, l_Distance);
             m_LineRenderer.SetPosition(1, l_Position);
         }
