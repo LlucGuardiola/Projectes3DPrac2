@@ -8,8 +8,9 @@ public class Portal : MonoBehaviour
     public Camera m_Camera;
     public Transform m_OtherPortalTransform;
     public Portal m_MirrorPortal;
-    public float mm_NearCameraOffset;
+    public float m_NearCameraOffset;
     public List<Transform> m_ValidPositions;
+    public bool m_VisualPortal;
 
     [Header("Validation")]
     public float m_ValidDistanceOffset = .15f;
@@ -18,6 +19,8 @@ public class Portal : MonoBehaviour
 
     private void LateUpdate()
     {
+        if ( m_VisualPortal) { return; }
+
         Vector3 l_WorldPosition = Camera.main.transform.position;
         Vector3 l_LocalPosition = m_OtherPortalTransform.InverseTransformPoint(l_WorldPosition);
 
@@ -29,7 +32,7 @@ public class Portal : MonoBehaviour
 
         float l_DistanceToPortal = Vector3.Distance(m_MirrorPortal.transform.position, 
             m_MirrorPortal.m_Camera.transform.position);
-        m_MirrorPortal.m_Camera.nearClipPlane = l_DistanceToPortal + mm_NearCameraOffset;
+        m_MirrorPortal.m_Camera.nearClipPlane = l_DistanceToPortal + m_NearCameraOffset;
     }
     public bool IsValidPosition(Vector3 Position, Vector3 Normal)
     {
@@ -83,9 +86,15 @@ public class Portal : MonoBehaviour
         {
             transform.position = l_InitialPosition;
             transform.rotation = l_InitialRotation;
+            if (m_VisualPortal) 
+            { 
+                gameObject.SetActive(false);
+                return l_Valid;
+            }
         }
-        gameObject.SetActive(true);
 
+        gameObject.SetActive(true);
+        
         return l_Valid;
     }
 }

@@ -83,6 +83,10 @@ public class PlayerController : MonoBehaviour
     [Header("Portals")]
     public Portal m_BluePortal;
     public Portal m_OrangePortal;
+    public Portal m_BlueVisualPortal;
+    public Portal m_OrangeVisualPortal;
+    private bool m_DisplayingBluePortal = false;
+    private bool m_DisplayingOrangePortal = false;
 
     [Header("AttachObject")]
     public ForceMode m_ForceMode;
@@ -114,6 +118,9 @@ public class PlayerController : MonoBehaviour
 
         m_StartPosition = transform.position;
         m_StartRotation = transform.rotation;
+        m_BlueVisualPortal.gameObject.SetActive(false);
+        m_OrangeVisualPortal.gameObject.SetActive(false);
+
 
         DontDestroyOnLoad(gameObject);
         //GameManager.GetGameManager().SetPlayer(this);
@@ -185,13 +192,34 @@ public class PlayerController : MonoBehaviour
             m_VerticalSpeed = m_JumpSpeed;
             CoyoteTimeCounter = 0;
         }
-        
-        if(CanShoot())
+
+        //if(CanShoot())
+        //{
+        //    if (Input.GetMouseButtonDown(m_BlueShootMouseButton))
+        //        Shoot(m_BluePortal);
+        //    else if (Input.GetMouseButtonDown(m_OrangeShootMouseButton))
+        //        Shoot(m_OrangePortal);
+        //}
+
+        if (CanShoot())
         {
-            if (Input.GetMouseButtonDown(m_BlueShootMouseButton))
+            if (Input.GetMouseButton(m_BlueShootMouseButton))
+                PreviewPortal(m_BlueVisualPortal, "blue");
+            else if (Input.GetMouseButton(m_OrangeShootMouseButton))
+                PreviewPortal(m_OrangeVisualPortal, "orange");
+
+
+            if (Input.GetMouseButtonUp(m_BlueShootMouseButton) && m_DisplayingBluePortal)
+            {
+                Debug.Log("hide blue portal");
                 Shoot(m_BluePortal);
-            else if (Input.GetMouseButtonDown(m_OrangeShootMouseButton))
+                m_BlueVisualPortal.gameObject.SetActive(false);
+            }
+            else if (Input.GetMouseButtonUp(m_OrangeShootMouseButton) && m_DisplayingOrangePortal)
+            {
                 Shoot(m_OrangePortal);
+                m_OrangeVisualPortal.gameObject.SetActive(false);
+            }
         }
 
         if (CanAttachObjects())
@@ -205,6 +233,36 @@ public class PlayerController : MonoBehaviour
 
         UpdateHUD();
     }
+    void PreviewPortal(Portal _Portal, string _PortalColor)
+    {
+        if (_PortalColor == "blue") 
+        {
+            m_DisplayingBluePortal = true;
+            m_DisplayingOrangePortal = false;
+        }
+        else if (_PortalColor == "orange") 
+        { 
+            m_DisplayingBluePortal = false;
+            m_DisplayingOrangePortal = true;
+        }
+
+        Ray l_Ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance,
+            _Portal.m_ValidLayerMask.value, QueryTriggerInteraction.Ignore))
+        {
+            if (l_RaycastHit.collider.CompareTag("DrawableWall"))
+            {
+                if (m_DisplayingBluePortal) { m_BluePortal.gameObject.SetActive(false); }
+                else if (m_DisplayingOrangePortal) { m_OrangePortal.gameObject.SetActive(false); }
+
+                _Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal);
+
+                if (m_DisplayingBluePortal) { m_BluePortal.gameObject.SetActive(true); }
+                else if (m_DisplayingOrangePortal) { m_OrangePortal.gameObject.SetActive(true); }
+            }
+        }
+    }
+
     bool CanAttachObjects()
     {
         return true;
