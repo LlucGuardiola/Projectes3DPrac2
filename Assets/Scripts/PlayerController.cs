@@ -262,15 +262,7 @@ public class PlayerController : MonoBehaviour
         {
             if (l_RaycastHit.collider.CompareTag("DrawableWall"))
             {
-                if (_Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal))
-                {
-                    _Portal.gameObject.SetActive(true);
-
-                }
-                else
-                {
-                    _Portal.gameObject.SetActive(false);
-                }
+                _Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal);
             }
         }
 

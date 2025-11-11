@@ -33,11 +33,13 @@ public class Portal : MonoBehaviour
     }
     public bool IsValidPosition(Vector3 Position, Vector3 Normal)
     {
+        bool l_Valid = true;
         gameObject.SetActive(false);
+        Vector3 l_InitialPosition = transform.position;
+        Quaternion l_InitialRotation = transform.rotation;
+
         transform.position = Position;
         transform.rotation = Quaternion.LookRotation(Normal);
-
-        bool l_Valid = true;
         Vector3 l_CameraPosition = Camera.main.transform.position;
 
         for (int i = 0; i < m_ValidPositions.Count; ++i)
@@ -49,7 +51,7 @@ public class Portal : MonoBehaviour
 
             Ray l_Ray = new Ray(l_CameraPosition, l_Direction);
             if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, l_Distance + m_ValidDistanceOffset, 
-                m_ValidLayerMask.value, QueryTriggerInteraction.Ignore))
+                m_ValidLayerMask.value))
             {
                 if (l_RaycastHit.collider.CompareTag("DrawableWall"))
                 {
@@ -76,6 +78,13 @@ public class Portal : MonoBehaviour
                 l_Valid = false;
             }
         }
+
+        if (!l_Valid)
+        {
+            transform.position = l_InitialPosition;
+            transform.rotation = l_InitialRotation;
+        }
+        gameObject.SetActive(true);
 
         return l_Valid;
     }
