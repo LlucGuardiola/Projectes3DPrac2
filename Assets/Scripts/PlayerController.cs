@@ -403,6 +403,10 @@ public class PlayerController : MonoBehaviour
                 {
                     AttachObject(l_RaycastHit.rigidbody);
                 }
+                if (l_RaycastHit.collider.CompareTag("Turret"))
+                {
+                    AttachObject(l_RaycastHit.rigidbody);
+                }
             }
         }
     }
@@ -411,7 +415,10 @@ public class PlayerController : MonoBehaviour
     {
         m_AttachingObject = true;
         m_AttachedRigidbody = _Rigidbody;
-        m_AttachedRigidbody.GetComponent<CompanionCube>().SetAttachedObject(true);
+        if (_Rigidbody.TryGetComponent(out CompanionCube cube))
+            cube.SetAttachedObject(true);
+        else if (_Rigidbody.TryGetComponent(out Turret turret))
+            turret.SetAttachedObject(true);
         m_StartAttachingObjectPosition = _Rigidbody.transform.position;
         Debug.Log("m_StartAttachingObjectPosition " + m_StartAttachingObjectPosition);
         m_AttachingCurrentTime = 0f;
@@ -453,7 +460,11 @@ public class PlayerController : MonoBehaviour
         m_AttachedRigidbody.transform.SetParent(null);
         m_AttachingObject = false;
         m_AttachedObject = false;
-        m_AttachedRigidbody.GetComponent<CompanionCube>().SetAttachedObject(false);
+        if (m_AttachedRigidbody.TryGetComponent(out CompanionCube cube))
+            cube.SetAttachedObject(false);
+        else if (m_AttachedRigidbody.TryGetComponent(out Turret turret))
+            turret.SetAttachedObject(false);
+
         m_AttachedRigidbody = null;
     }
 

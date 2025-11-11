@@ -8,6 +8,9 @@ TagManager:
   - DrawableWall
   - Cube
   - RefractionCube
+  - BouncingSurface
+  - SlidingSurface
+  - Turret
   layers:
   - Default
   - TransparentFX

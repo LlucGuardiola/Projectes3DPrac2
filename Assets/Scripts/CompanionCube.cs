@@ -7,25 +7,88 @@ public class CompanionCube : MonoBehaviour
     public float m_MaxAngleToTeleport = 45f;
     bool m_AttachedObject = false;
 
+    [Header("Surface Settings")]
+    public float bounceForce = 12f;
+    public float slidingDrag = 0.05f;
+    public float slidingAcceleration = 8f;
+
+
+
+
+
     private void Awake()
     {
         m_RigidBody = GetComponent<Rigidbody>();
+
+     
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Portal"))
+        if (other.CompareTag("Portal"))
         {
             Portal l_Portal = other.GetComponent<Portal>();
 
-            if(CanTeleport(l_Portal)) 
+            if (CanTeleport(l_Portal))
                 Teleport(l_Portal);
         }
     }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        if (collision.collider.CompareTag("BouncingSurface"))
+            ApplyBounce(collision);
+
+
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("SlidingSurface"))
+            ApplySliding(collision);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("SlidingSurface"))
+        {
+            m_RigidBody.constraints &= ~RigidbodyConstraints.FreezeRotation;
+        }
+    }
+
+    void ApplyBounce(Collision col)
+    {
+        if (!m_RigidBody) return;
+
+        Vector3 normal = col.GetContact(0).normal;
+        m_RigidBody.AddForce(normal * bounceForce, ForceMode.Impulse);
+    }
+
+    void ApplySliding(Collision col)
+    {
+        if (!m_RigidBody) return;
+
+        Vector3 normal = col.GetContact(0).normal;
+
+        Vector3 slideDir = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
+
+        float slideSpeed = slidingAcceleration;
+
+        m_RigidBody.linearVelocity = slideDir * slideSpeed;
+
+        m_RigidBody.angularVelocity = Vector3.zero;
+
+        transform.forward = Vector3.Lerp(transform.forward, slideDir, Time.deltaTime * 5f);
+    }
+
     bool CanTeleport(Portal _Portal)
     {
         float l_DotValue = Vector3.Dot(_Portal.transform.forward, -m_RigidBody.linearVelocity.normalized);
         return !m_AttachedObject && l_DotValue > Mathf.Cos(m_MaxAngleToTeleport * Mathf.Deg2Rad);
     }
+
     void Teleport(Portal _Portal)
     {
         Vector3 l_Direction = m_RigidBody.linearVelocity.normalized;
@@ -39,9 +102,11 @@ public class CompanionCube : MonoBehaviour
 
         Vector3 l_LocalVelocity = _Portal.m_OtherPortalTransform.InverseTransformDirection(m_RigidBody.linearVelocity);
         m_RigidBody.linearVelocity = _Portal.m_MirrorPortal.transform.TransformDirection(l_LocalVelocity);
-        float l_Scale = _Portal.m_MirrorPortal.transform.localScale.x / _Portal.transform.localScale.x; 
+
+        float l_Scale = _Portal.m_MirrorPortal.transform.localScale.x / _Portal.transform.localScale.x;
         m_RigidBody.transform.localScale = Vector3.one * l_Scale * m_RigidBody.transform.localScale.x;
     }
+
     public void SetAttachedObject(bool AttachedObject)
     {
         m_AttachedObject = AttachedObject;
