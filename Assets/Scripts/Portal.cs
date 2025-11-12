@@ -10,7 +10,7 @@ public class Portal : MonoBehaviour
     public Portal m_MirrorPortal;
     public float m_NearCameraOffset;
     public List<Transform> m_ValidPositions;
-    public bool m_VisualPortal;
+    public bool m_PreviewPortal;
 
     [Header("Validation")]
     public float m_ValidDistanceOffset = .15f;
@@ -19,7 +19,7 @@ public class Portal : MonoBehaviour
 
     private void LateUpdate()
     {
-        if ( m_VisualPortal) { return; }
+        if ( m_PreviewPortal) { return; }
 
         Vector3 l_WorldPosition = Camera.main.transform.position;
         Vector3 l_LocalPosition = m_OtherPortalTransform.InverseTransformPoint(l_WorldPosition);
@@ -64,6 +64,7 @@ public class Portal : MonoBehaviour
                         if(l_DotAngle < Mathf.Cos(m_MaxAnglePermitted * Mathf.Deg2Rad))
                         {
                             l_Valid = false;
+
                         }
                     }
                     else
@@ -86,7 +87,7 @@ public class Portal : MonoBehaviour
         {
             transform.position = l_InitialPosition;
             transform.rotation = l_InitialRotation;
-            if (m_VisualPortal) 
+            if (m_PreviewPortal) 
             { 
                 gameObject.SetActive(false);
                 return l_Valid;
@@ -96,5 +97,20 @@ public class Portal : MonoBehaviour
         gameObject.SetActive(true);
         
         return l_Valid;
+    }
+    public void ChangeSize(int _Size)
+    {
+        switch(_Size)
+        {
+            case 0:
+                transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                break;
+            case 1:
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
+            case 2:
+                transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            break;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -87,6 +88,14 @@ public class PlayerController : MonoBehaviour
     public Portal m_OrangeVisualPortal;
     private bool m_DisplayingBluePortal = false;
     private bool m_DisplayingOrangePortal = false;
+
+    enum TState
+    {
+        SMALL = 0,
+        DEFAULT, 
+        LARGE
+    }
+    TState m_CurrentPortalSize = TState.DEFAULT;
 
     [Header("AttachObject")]
     public ForceMode m_ForceMode;
@@ -211,7 +220,6 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetMouseButtonUp(m_BlueShootMouseButton) && m_DisplayingBluePortal)
             {
-                Debug.Log("hide blue portal");
                 Shoot(m_BluePortal);
                 m_BlueVisualPortal.gameObject.SetActive(false);
             }
@@ -246,6 +254,35 @@ public class PlayerController : MonoBehaviour
             m_DisplayingOrangePortal = true;
         }
 
+
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f) // Portal gets bigger
+        {
+            if ((int)m_CurrentPortalSize < Enum.GetValues(typeof(TState)).Length - 1)
+            {
+                m_CurrentPortalSize++;
+            }
+        }
+        else if(Input.GetAxis("Mouse ScrollWheel") < 0f) // Portal gets smaller
+        {
+            if ((int)m_CurrentPortalSize > 0)
+            {
+                m_CurrentPortalSize--;
+            }
+        }
+
+        switch (m_CurrentPortalSize)
+        {
+            case TState.SMALL:
+                _Portal.ChangeSize((int)m_CurrentPortalSize);
+                break;
+            case TState.DEFAULT:
+                _Portal.ChangeSize((int)m_CurrentPortalSize);
+                break;
+            case TState.LARGE:
+                _Portal.ChangeSize((int)m_CurrentPortalSize);
+            break;
+        }
+
         Ray l_Ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance,
             _Portal.m_ValidLayerMask.value, QueryTriggerInteraction.Ignore))
@@ -265,7 +302,7 @@ public class PlayerController : MonoBehaviour
 
     bool CanAttachObjects()
     {
-        return true;
+        return !m_DisplayingBluePortal && !m_DisplayingOrangePortal;
     }
 
     bool CanShoot()
@@ -320,10 +357,14 @@ public class PlayerController : MonoBehaviour
         {
             if (l_RaycastHit.collider.CompareTag("DrawableWall"))
             {
+                _Portal.ChangeSize((int)m_CurrentPortalSize);
                 _Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal);
             }
         }
 
+        m_DisplayingBluePortal = false;
+        m_DisplayingOrangePortal = false;
+        m_CurrentPortalSize = TState.DEFAULT;
     }
     void CreateShootHitParticles(Vector3 Position, Vector3 Normal)
     {
