@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
     public float m_FireRateCurrentTime = 0f;
     public float m_ReloadCooldown = 1f;
     public float m_ReloadTime = 0f;
+    private bool m_CanShoot = true;
 
     [Header("Animation")]
 
@@ -209,14 +210,13 @@ public class PlayerController : MonoBehaviour
         //    else if (Input.GetMouseButtonDown(m_OrangeShootMouseButton))
         //        Shoot(m_OrangePortal);
         //}
-
+        
         if (CanShoot())
         {
             if (Input.GetMouseButton(m_BlueShootMouseButton))
                 PreviewPortal(m_BlueVisualPortal, "blue");
             else if (Input.GetMouseButton(m_OrangeShootMouseButton))
                 PreviewPortal(m_OrangeVisualPortal, "orange");
-
 
             if (Input.GetMouseButtonUp(m_BlueShootMouseButton) && m_DisplayingBluePortal)
             {
@@ -253,7 +253,6 @@ public class PlayerController : MonoBehaviour
             m_DisplayingBluePortal = false;
             m_DisplayingOrangePortal = true;
         }
-
 
         if(Input.GetAxis("Mouse ScrollWheel") > 0f) // Portal gets bigger
         {
@@ -307,7 +306,10 @@ public class PlayerController : MonoBehaviour
 
     bool CanShoot()
     {
-        return m_AttachedRigidbody == null; // AttachedObjectRigidbody
+        if (Input.GetMouseButtonDown(m_BlueShootMouseButton) || Input.GetMouseButtonDown(m_OrangeShootMouseButton))
+            m_CanShoot = true;
+
+        return m_AttachedRigidbody == null && m_CanShoot; // AttachedObjectRigidbody
         //bool l_CanShoot = m_MagazineCurrentBullets > 0 && m_FireRateCurrentTime <= 0f && m_ReloadTime <= 0f;
         //return l_CanShoot;
     }
@@ -564,6 +566,7 @@ public class PlayerController : MonoBehaviour
         else if (m_AttachedRigidbody.TryGetComponent(out Turret turret))
             turret.SetAttachedObject(false);
 
+        m_CanShoot = false;
         m_AttachedRigidbody = null;
     }
 

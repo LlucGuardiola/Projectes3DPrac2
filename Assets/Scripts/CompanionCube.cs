@@ -12,15 +12,9 @@ public class CompanionCube : MonoBehaviour
     public float slidingDrag = 0.05f;
     public float slidingAcceleration = 8f;
 
-
-
-
-
     private void Awake()
     {
         m_RigidBody = GetComponent<Rigidbody>();
-
-     
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,11 +31,8 @@ public class CompanionCube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (collision.collider.CompareTag("BouncingSurface"))
             ApplyBounce(collision);
-
-
     }
 
     private void OnCollisionStay(Collision collision)
