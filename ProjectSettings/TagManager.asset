@@ -11,6 +11,7 @@ TagManager:
   - BouncingSurface
   - SlidingSurface
   - Turret
+  - DeathZone
   layers:
   - Default
   - TransparentFX

@@ -113,18 +113,18 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //PlayerController l_Player = GameManager.GetGameManager().GetPlayer();
-        //if (l_Player != null)
-        //{
-        //    l_Player.m_CharacterController.enabled = false;
-        //    l_Player.transform.position = transform.position;
-        //    l_Player.transform.rotation = transform.rotation;
-        //    l_Player.m_CharacterController.enabled = true;
-        //    l_Player.m_StartPosition = transform.position;
-        //    l_Player.m_StartRotation = transform.rotation;
+        PlayerController l_Player = GameManager.GetGameManager().GetPlayer();
+        if (l_Player != null)
+        {
+            l_Player.m_CharacterController.enabled = false;
+            l_Player.transform.position = transform.position;
+            l_Player.transform.rotation = transform.rotation;
+           l_Player.m_CharacterController.enabled = true;
+            l_Player.m_StartPosition = transform.position;
+            l_Player.m_StartRotation = transform.rotation;
         //    Destroy(gameObject);
-        //    return;
-        //}
+            return;
+        }
 
         m_StartPosition = transform.position;
         m_StartRotation = transform.rotation;
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
 
 
         DontDestroyOnLoad(gameObject);
-        //GameManager.GetGameManager().SetPlayer(this);
+        GameManager.GetGameManager().SetPlayer(this);
         Cursor.lockState = CursorLockMode.Locked;
         SetIdleAnimation();
     }
@@ -416,10 +416,10 @@ public class PlayerController : MonoBehaviour
         //        l_Item.Pick();
         //    }
         //}
-        //else if (other.CompareTag("DeathZone"))
-        //{
-        //    Kill(false);
-        //}
+        if (other.CompareTag("DeathZone"))
+        {
+            Kill(false);
+        }
         //else if (other.CompareTag("Door"))
         //{
         //    if (other.gameObject.GetComponent<Door>().m_Locked) return;
@@ -469,9 +469,9 @@ public class PlayerController : MonoBehaviour
     }
     void Kill(bool resetStats)
     {
-        //GameManager.GetGameManager().m_Fade.FadeIn(() => {
-        //    GameManager.GetGameManager().RestartLevel(resetStats);
-        //});
+        GameManager.GetGameManager().m_Fade.FadeIn(() => {
+           GameManager.GetGameManager().RestartLevel(resetStats);
+        });
     }
     public void Restart(bool resetStats)
     {
