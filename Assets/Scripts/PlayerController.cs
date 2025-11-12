@@ -521,7 +521,6 @@ public class PlayerController : MonoBehaviour
         else if (_Rigidbody.TryGetComponent(out Turret turret))
             turret.SetAttachedObject(true);
         m_StartAttachingObjectPosition = _Rigidbody.transform.position;
-        Debug.Log("m_StartAttachingObjectPosition " + m_StartAttachingObjectPosition);
         m_AttachingCurrentTime = 0f;
         m_AttachedObject = false;
     }
