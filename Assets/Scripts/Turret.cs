@@ -24,11 +24,9 @@ public class Turret : MonoBehaviour
 
     private void Update()
     {
-        // Solo dispara si no está siendo sostenida
-        if (!m_AttachedObject)
-            HandleLaser();
-        else if (m_LineRenderer.gameObject.activeSelf)
-            m_LineRenderer.gameObject.SetActive(false);
+        
+       HandleLaser();
+        
     }
 
     private void HandleLaser()
@@ -111,16 +109,6 @@ public class Turret : MonoBehaviour
             m_Rigidbody.angularVelocity = Vector3.zero;
         }
 
-        if (AttachedObject)
-        {
-            if (m_LineRenderer != null)
-                m_LineRenderer.gameObject.SetActive(false);
-        }
-        else
-        {
-            // Reactivar láser cuando se suelta
-            if (m_LineRenderer != null)
-                m_LineRenderer.gameObject.SetActive(true);
-        }
+       
     }
 }
