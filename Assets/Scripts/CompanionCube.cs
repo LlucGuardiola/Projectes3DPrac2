@@ -35,19 +35,7 @@ public class CompanionCube : MonoBehaviour
             ApplyBounce(collision);
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.collider.CompareTag("SlidingSurface"))
-            ApplySliding(collision);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.collider.CompareTag("SlidingSurface"))
-        {
-            m_RigidBody.constraints &= ~RigidbodyConstraints.FreezeRotation;
-        }
-    }
+    
 
     void ApplyBounce(Collision col)
     {
@@ -57,22 +45,7 @@ public class CompanionCube : MonoBehaviour
         m_RigidBody.AddForce(normal * bounceForce, ForceMode.Impulse);
     }
 
-    void ApplySliding(Collision col)
-    {
-        if (!m_RigidBody) return;
-
-        Vector3 normal = col.GetContact(0).normal;
-
-        Vector3 slideDir = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
-
-        float slideSpeed = slidingAcceleration;
-
-        m_RigidBody.linearVelocity = slideDir * slideSpeed;
-
-        m_RigidBody.angularVelocity = Vector3.zero;
-
-        transform.forward = Vector3.Lerp(transform.forward, slideDir, Time.deltaTime * 5f);
-    }
+   
 
     bool CanTeleport(Portal _Portal)
     {

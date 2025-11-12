@@ -418,7 +418,8 @@ public class PlayerController : MonoBehaviour
         //}
         if (other.CompareTag("DeathZone"))
         {
-            Kill(false);
+            GameManager.GetGameManager().GameOver();
+
         }
         //else if (other.CompareTag("Door"))
         //{

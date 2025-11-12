@@ -69,13 +69,7 @@ public class Turret : MonoBehaviour
             ApplyBounce(collision);
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (m_AttachedObject) return;
-
-        if (collision.collider.CompareTag("SlidingSurface"))
-            ApplySliding(collision);
-    }
+ 
 
     void ApplyBounce(Collision col)
     {
@@ -83,19 +77,6 @@ public class Turret : MonoBehaviour
 
         Vector3 normal = col.GetContact(0).normal;
         m_Rigidbody.AddForce(normal * bounceForce, ForceMode.Impulse);
-    }
-
-    void ApplySliding(Collision col)
-    {
-        if (!m_Rigidbody) return;
-
-        Vector3 normal = col.GetContact(0).normal;
-        Vector3 slideDir = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
-
-        m_Rigidbody.linearVelocity = slideDir * slidingAcceleration;
-        m_Rigidbody.angularVelocity = Vector3.zero;
-
-        transform.forward = Vector3.Lerp(transform.forward, slideDir, Time.deltaTime * 5f);
     }
 
     public void SetAttachedObject(bool AttachedObject)
