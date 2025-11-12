@@ -435,6 +435,13 @@ public class PlayerController : MonoBehaviour
                 Teleport(other.GetComponent<Portal>());
             }
         }
+
+        if (other.CompareTag("Checkpoint"))
+        {
+            m_StartPosition = other.gameObject.transform.position;
+            m_StartRotation = other.gameObject.transform.rotation;
+            Destroy(other.gameObject);
+        }
     }
     bool CanTeleport(Portal _Portal)
     {

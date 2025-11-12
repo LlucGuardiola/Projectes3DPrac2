@@ -12,6 +12,7 @@ TagManager:
   - SlidingSurface
   - Turret
   - DeathZone
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
