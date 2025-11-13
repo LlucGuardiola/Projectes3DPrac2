@@ -7,7 +7,10 @@ public class GameManager : MonoBehaviour
     private PlayerController m_Player;
 
     public Fade m_Fade;
-    public GameObject m_GameOverUI;  
+    public GameObject m_GameOverUI;
+    
+    public AudioSource m_MusicSource;
+    public AudioClip m_BackgroundMusic;
 
     private bool m_IsGameOver = false;
 
@@ -17,6 +20,16 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
+        }
+        if (m_MusicSource != null && m_BackgroundMusic != null)
+        {
+            if (!m_MusicSource.isPlaying)
+            {
+                m_MusicSource.clip = m_BackgroundMusic;
+                m_MusicSource.loop = true;
+                m_MusicSource.volume = 0.5f; 
+                m_MusicSource.Play();
+            }
         }
 
         m_GameManager = this;

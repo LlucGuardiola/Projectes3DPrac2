@@ -90,6 +90,9 @@ public class PlayerController : MonoBehaviour
     private bool m_DisplayingBluePortal = false;
     private bool m_DisplayingOrangePortal = false;
 
+    [SerializeField] private AudioClip m_PortalGun;
+    [SerializeField] private AudioClip m_Teleport;
+
     enum TState
     {
         SMALL = 0,
@@ -322,6 +325,8 @@ public class PlayerController : MonoBehaviour
     }
     void Shoot(Portal _Portal)
     {
+        SoundFXManager.instance.PlaySoundFXClip(m_PortalGun, transform, 1f);
+
         //m_MagazineCurrentBullets--;
         //m_FireRateCurrentTime = m_FireRateCooldown;
         //m_ShootFlare.SetActive(true);
@@ -361,8 +366,10 @@ public class PlayerController : MonoBehaviour
             {
                 _Portal.ChangeSize((int)m_CurrentPortalSize);
                 _Portal.IsValidPosition(l_RaycastHit.point, l_RaycastHit.normal);
+
             }
         }
+
 
         m_DisplayingBluePortal = false;
         m_DisplayingOrangePortal = false;
@@ -451,6 +458,8 @@ public class PlayerController : MonoBehaviour
     }
     void Teleport(Portal _Portal)
     {
+        SoundFXManager.instance.PlaySoundFXClip(m_Teleport, transform, 1f);
+
         m_MovementDirection.Normalize();
         Vector3 l_NextPosition = transform.position + m_MovementDirection * m_portalDistance;
         Vector3 l_LocalPosition = _Portal.m_OtherPortalTransform.InverseTransformPoint(l_NextPosition);

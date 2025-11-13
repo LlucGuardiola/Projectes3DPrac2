@@ -11991,6 +11991,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c006aed4513af0c46b0ff62aefbc3e63, type: 3}
+--- !u!1 &1282471132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1282471134}
+  - component: {fileID: 1282471133}
+  m_Layer: 0
+  m_Name: SoundFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1282471133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282471132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f8846b125b8824e81572deab4e0065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXObject: {fileID: 8456021297483364665, guid: 95bbf4425077f504595a3f8996430473, type: 3}
+--- !u!4 &1282471134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282471132}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.901377, y: 0.6235421, z: -16.908016}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1293047853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20186,9 +20231,21 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
+      propertyPath: m_Teleport
+      value: 
+      objectReference: {fileID: 8300000, guid: 22e9b3cc3017a8e4095293a977e16a03, type: 3}
+    - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
       propertyPath: m_ForceMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
+      propertyPath: m_PortalGun
+      value: 
+      objectReference: {fileID: 8300000, guid: 71d81c52b80ca2e4a99f4978adf40f52, type: 3}
+    - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
+      propertyPath: m_portalGun
+      value: 
+      objectReference: {fileID: 8300000, guid: 71d81c52b80ca2e4a99f4978adf40f52, type: 3}
     - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
       propertyPath: m_BluePortal
       value: 
@@ -20642,6 +20699,7 @@ SceneRoots:
   - {fileID: 5254729017339598526}
   - {fileID: 1061332664}
   - {fileID: 159290239}
+  - {fileID: 1282471134}
   - {fileID: 2020605157}
   - {fileID: 209697288666380875}
   - {fileID: 615894722}
