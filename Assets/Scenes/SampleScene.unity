@@ -20343,9 +20343,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 71d81c52b80ca2e4a99f4978adf40f52, type: 3}
     - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
+      propertyPath: m_ThrowItem
+      value: 
+      objectReference: {fileID: 8300000, guid: e9968a2725ee38947b8580efccf6af5b, type: 3}
+    - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
       propertyPath: m_portalGun
       value: 
       objectReference: {fileID: 8300000, guid: 71d81c52b80ca2e4a99f4978adf40f52, type: 3}
+    - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
+      propertyPath: m_AttachItem
+      value: 
+      objectReference: {fileID: 8300000, guid: 7131726d6a36663408ac25ca67ff168f, type: 3}
     - target: {fileID: 7171915811910694908, guid: 603b8a341503532419765c45e8d839b8, type: 3}
       propertyPath: m_BluePortal
       value: 

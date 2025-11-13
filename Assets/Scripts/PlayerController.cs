@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private AudioClip m_PortalGun;
     [SerializeField] private AudioClip m_Teleport;
+    [SerializeField] private AudioClip m_AttachItem;
+    [SerializeField] private AudioClip m_ThrowItem;
 
     enum TState
     {
@@ -510,9 +512,12 @@ public class PlayerController : MonoBehaviour
     }
 
     void AttachObject()
-    {   
-        if(Input.GetKeyDown(m_GrabKeyCode))
+    {
+
+        if (Input.GetKeyDown(m_GrabKeyCode))
         {
+            SoundFXManager.instance.PlaySoundFXClip(m_AttachItem, transform, 1f);
+
             Ray l_Ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             if (Physics.Raycast(l_Ray, out RaycastHit l_RaycastHit, m_ShootMaxDistance,
                 m_ValidAttachObjectsLayerMask.value, QueryTriggerInteraction.Ignore))
@@ -572,6 +577,8 @@ public class PlayerController : MonoBehaviour
     
     void ThrowObject(float Force)
     {
+        SoundFXManager.instance.PlaySoundFXClip(m_ThrowItem, transform, 1f);
+
         m_AttachedRigidbody.isKinematic = false;
         m_AttachedRigidbody.AddForce(m_PitchController.forward * Force, m_ForceMode);
         m_AttachedRigidbody.transform.SetParent(null);
