@@ -44,6 +44,18 @@ public class RefractionCube : MonoBehaviour
             {
                 GameManager.GetGameManager().GameOver();
             }
+            if (l_RayCastHit.collider.CompareTag("PortalButton"))
+            {
+                PortalButton l_Button = l_RayCastHit.collider.GetComponent<PortalButton>();
+                if (l_Button != null)
+                {
+                    l_Button.m_Open.Invoke();
+                }
+                else
+                {
+                    l_Button.m_Close.Invoke();
+                }
+            }
         }
         Vector3 l_Position = new Vector3(0f, 0f, l_Distance);
         m_LineRenderer.SetPosition(1, l_Position);
