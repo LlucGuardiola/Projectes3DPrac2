@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public AudioSource m_MusicSource;
     public AudioClip m_BackgroundMusic;
 
-    private bool m_IsGameOver = false;
+    public bool m_IsGameOver = false;
 
     private void Awake()
     {
@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-      
         if (!m_IsGameOver) return;
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -58,13 +57,13 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel(bool resetStats)
     {
-        Time.timeScale = 1f;
-        m_IsGameOver = false;
+        m_Player.Restart(resetStats);
+        Debug.Log("Gameover");
 
         if (m_GameOverUI != null)
             m_GameOverUI.SetActive(false);
 
-        m_Player.Restart(resetStats);
+        m_IsGameOver = false;
 
         m_Fade.FadeOut(() =>
         {
@@ -77,7 +76,6 @@ public class GameManager : MonoBehaviour
         if (m_IsGameOver) return;
 
         m_IsGameOver = true;
-        Time.timeScale = 0f; 
 
         if (m_GameOverUI != null)
             m_GameOverUI.SetActive(true);

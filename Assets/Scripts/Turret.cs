@@ -24,9 +24,7 @@ public class Turret : MonoBehaviour
 
     private void Update()
     {
-        
        HandleLaser();
-        
     }
 
     private void HandleLaser()
@@ -100,7 +98,5 @@ public class Turret : MonoBehaviour
             m_Rigidbody.linearVelocity = Vector3.zero;
             m_Rigidbody.angularVelocity = Vector3.zero;
         }
-
-       
     }
 }

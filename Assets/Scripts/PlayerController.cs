@@ -145,6 +145,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.GetGameManager().m_IsGameOver) return;
+
         float l_MouseX = Input.GetAxis("Mouse X");
         float l_MouseY = Input.GetAxis("Mouse Y");
 
@@ -527,6 +529,10 @@ public class PlayerController : MonoBehaviour
                     AttachObject(l_RaycastHit.rigidbody);
                 }
                 if (l_RaycastHit.collider.CompareTag("Turret"))
+                {
+                    AttachObject(l_RaycastHit.rigidbody);
+                }
+                if (l_RaycastHit.collider.CompareTag("RefractionCube"))
                 {
                     AttachObject(l_RaycastHit.rigidbody);
                 }
