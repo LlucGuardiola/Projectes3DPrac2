@@ -13,6 +13,7 @@ TagManager:
   - Turret
   - DeathZone
   - Checkpoint
+  - PortalButton
   layers:
   - Default
   - TransparentFX
