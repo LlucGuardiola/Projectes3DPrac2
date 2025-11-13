@@ -109,7 +109,7 @@ public class Portal : MonoBehaviour
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 break;
             case 2:
-                transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                transform.localScale = new Vector3(2f, 2f, 2f);
             break;
         }
     }
