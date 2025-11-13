@@ -12,6 +12,9 @@ public class CompanionCube : MonoBehaviour
     public float slidingDrag = 0.05f;
     public float slidingAcceleration = 8f;
 
+    [SerializeField] private AudioClip m_Teleport;
+
+
     private void Awake()
     {
         m_RigidBody = GetComponent<Rigidbody>();
@@ -55,6 +58,8 @@ public class CompanionCube : MonoBehaviour
 
     void Teleport(Portal _Portal)
     {
+        SoundFXManager.instance.PlaySoundFXClip(m_Teleport, transform, 1f);
+
         Vector3 l_Direction = m_RigidBody.linearVelocity.normalized;
         Vector3 l_WorldPosition = transform.position + l_Direction * m_PortalDistance;
         Vector3 l_LocalPosition = _Portal.m_OtherPortalTransform.InverseTransformPoint(l_WorldPosition);

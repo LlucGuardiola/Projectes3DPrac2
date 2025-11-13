@@ -2843,6 +2843,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PortalDistance: 1.5
   m_MaxAngleToTeleport: 45
+  bounceForce: 12
+  slidingDrag: 0.05
+  slidingAcceleration: 8
+  m_Teleport: {fileID: 8300000, guid: 22e9b3cc3017a8e4095293a977e16a03, type: 3}
 --- !u!1 &1996072827028512
 GameObject:
   m_ObjectHideFlags: 0
