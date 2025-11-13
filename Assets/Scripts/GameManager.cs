@@ -58,17 +58,17 @@ public class GameManager : MonoBehaviour
     public void RestartLevel(bool resetStats)
     {
         m_Player.Restart(resetStats);
-        Debug.Log("Gameover");
 
         if (m_GameOverUI != null)
             m_GameOverUI.SetActive(false);
 
-        m_IsGameOver = false;
 
         m_Fade.FadeOut(() =>
         {
             m_Fade.gameObject.SetActive(false);
         });
+
+        m_IsGameOver = false;
     }
 
     public void GameOver()
@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-
     }
 
     public PlayerController GetPlayer()

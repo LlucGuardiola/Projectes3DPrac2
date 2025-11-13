@@ -8,7 +8,7 @@ public class PortalButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Cube"))
+        if (other.CompareTag("Cube") && !other.gameObject.GetComponent<CompanionCube>().m_AttachedObject)
         {
             m_Open.Invoke();
         }

@@ -71,7 +71,6 @@ public class Turret : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
         if (m_AttachedObject) return;

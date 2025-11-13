@@ -5,7 +5,7 @@ public class CompanionCube : MonoBehaviour
     Rigidbody m_RigidBody;
     public float m_PortalDistance = 1.5f;
     public float m_MaxAngleToTeleport = 45f;
-    bool m_AttachedObject = false;
+    public bool m_AttachedObject = false;
 
     [Header("Surface Settings")]
     public float bounceForce = 12f;
@@ -13,7 +13,6 @@ public class CompanionCube : MonoBehaviour
     public float slidingAcceleration = 8f;
 
     [SerializeField] private AudioClip m_Teleport;
-
 
     private void Awake()
     {
@@ -31,14 +30,11 @@ public class CompanionCube : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("BouncingSurface"))
             ApplyBounce(collision);
     }
-
-    
 
     void ApplyBounce(Collision col)
     {
@@ -47,8 +43,6 @@ public class CompanionCube : MonoBehaviour
         Vector3 normal = col.GetContact(0).normal;
         m_RigidBody.AddForce(normal * bounceForce, ForceMode.Impulse);
     }
-
-   
 
     bool CanTeleport(Portal _Portal)
     {
