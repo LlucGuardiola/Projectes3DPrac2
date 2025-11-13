@@ -239,7 +239,7 @@ MonoBehaviour:
   m_MaxDistance: 50
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 9
   m_MaxAlifeAngle: 15
   bounceForce: 10
   slidingDrag: 0.05

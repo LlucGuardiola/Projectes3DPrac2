@@ -48,7 +48,19 @@ public class Turret : MonoBehaviour
             {
                 l_Distance = l_RayCastHit.distance;
 
-                if (l_RayCastHit.collider.CompareTag("RefractionCube"))
+                if (l_RayCastHit.collider.CompareTag("Player"))
+                {
+                    GameManager.GetGameManager().GameOver();
+                }
+                else if (l_RayCastHit.collider.CompareTag("Turret"))
+                {
+                    Turret otherTurret = l_RayCastHit.collider.GetComponent<Turret>();
+                    if (otherTurret != null && otherTurret != this)
+                    {
+                        Destroy(otherTurret.gameObject);
+                    }
+                }
+                else if (l_RayCastHit.collider.CompareTag("RefractionCube"))
                 {
                     var refraction = l_RayCastHit.collider.GetComponent<RefractionCube>();
                     if (refraction != null)
@@ -61,6 +73,7 @@ public class Turret : MonoBehaviour
         }
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
         if (m_AttachedObject) return;
@@ -68,8 +81,6 @@ public class Turret : MonoBehaviour
         if (collision.collider.CompareTag("BouncingSurface"))
             ApplyBounce(collision);
     }
-
- 
 
     void ApplyBounce(Collision col)
     {
